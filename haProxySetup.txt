@@ -1,0 +1,29 @@
+
+# Setup HaProxy LB in Ubuntu
+
+$ sudo apt-get update && sudo apt-get upgrade
+
+$ sudo apt-get install haproxy
+
+#  Setup HaProxy LB in Redhat
+$ sudo yum update -y 
+$ sudo yum install haproxy -y
+
+# Add Proxy Details in haproxy.cfg file
+
+$ sudo vi /etc/haproxy/haproxy.cfg
+frontend haproxynode
+    bind *:80
+    mode http
+    default_backend backendServers
+
+backend backendServers
+    balance roundrobin
+    option forwardfor
+    http-request set-header X-Forwarded-Port %[dst_port]
+    http-request add-header X-Forwarded-Proto https if { ssl_fc }
+    option httpchk HEAD / HTTP/1.1\r\nHost:localhost
+    server node1 <IP>:<PORT> check
+    server node2 <IP>:<PORT> check
+
+$ sudo service haproxy restart
