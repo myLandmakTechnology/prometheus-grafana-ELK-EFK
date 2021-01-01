@@ -23,7 +23,7 @@ backend backendServers
     http-request set-header X-Forwarded-Port %[dst_port]
     http-request add-header X-Forwarded-Proto https if { ssl_fc }
     option httpchk HEAD / HTTP/1.1\r\nHost:localhost
-    server node1 <IP>:<PORT> check
+    server node1 172.31.23.61:80 check
     server node2 <IP>:<PORT> check
 
 $ sudo service haproxy restart
